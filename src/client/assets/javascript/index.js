@@ -88,8 +88,9 @@ async function handleCreateRace() {
 	// TODO - call the async function runCountdown
 
 	// TODO - call the async function startRace
-
+startRace();
 	// TODO - call the async function runRace
+runRace();
 }
 
 function runRace(raceID) {
@@ -159,7 +160,7 @@ function handleSelectTrack(target) {
 
 	// add class selected to current target
 	target.classList.add('selected')
-
+	
 	// TODO - save the selected track id to the store
 	
 }
