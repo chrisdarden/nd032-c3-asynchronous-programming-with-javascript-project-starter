@@ -1,5 +1,6 @@
 // PROVIDED CODE BELOW (LINES 1 - 80) DO NOT REMOVE
 
+
 // The store will hold all information needed globally
 let store = {
 	track_id: undefined,
@@ -17,12 +18,15 @@ async function onPageLoad() {
 	try {
 		getTracks()
 			.then(tracks => {
+				console.log("getting tracks")
 				const html = renderTrackCards(tracks)
 				renderAt('#tracks', html)
+
 			})
 
 		getRacers()
 			.then((racers) => {
+				console.log("getting racers")
 				const html = renderRacerCars(racers)
 				renderAt('#racers', html)
 			})
@@ -78,12 +82,12 @@ async function handleCreateRace() {
 	renderAt('#race', renderRaceStartView())
 
 	// TODO - Get player_id and track_id from the store
-	store.player_id = playerId
-	store.track_id = trackId
+	let playerID = store.player_id
+	let trackID = store.track_id
 	// const race = TODO - invoke the API call to create the race, then save the result
-	newRace = createRace(playerId, trackId)
+	const race = createRace(playerID, trackID)
 	// TODO - update the store with the race id
-	race_id = (store.race_id) - 1;
+	let race_id = (store.race_id) - 1;
 	// For the API to work properly, the race id should be race id - 1
 	
 	// The race has been created, now start the countdown
@@ -91,15 +95,17 @@ async function handleCreateRace() {
 	runCountdown();
 
 	// TODO - call the async function startRace
-startRace();
+	startRace();
 	// TODO - call the async function runRace
-runRace();
+	runRace();
 }
 
 function runRace(raceID) {
 	return new Promise(resolve => {
 	// TODO - use Javascript's built in setInterval method to get race info every 500ms
-
+		setInterval(() => {
+			getraceinfo(raceID)
+		}, 500);
 	/* 
 		TODO - if the race info status property is "in-progress", update the leaderboard by calling:
 
@@ -326,10 +332,20 @@ function defaultFetchOpts() {
 
 function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
+	return fetch(`${SERVER}/api/tracks`)
+	.then(data => {
+		return data.json();
+		}).catch(err => console.log(`Error during fetch of getTracks(): ${err}`))
+		
 }
 
 function getRacers() {
 	// GET request to `${SERVER}/api/cars`
+	return fetch(`${SERVER}/api/cars`)
+	.then(data => {
+		return data.json();
+		}).catch(err => console.log(`Error during fetch of getRacers(): ${err}`))
+
 }
 
 function createRace(player_id, track_id) {
@@ -349,6 +365,10 @@ function createRace(player_id, track_id) {
 
 function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
+	return fetch(`${SERVER}/api/races/${id}`)
+	.then(data => {
+		return data.json();
+		}).catch(err => console.log(`Error during fetch of getRace(id): ${err}`))
 }
 
 function startRace(id) {
